@@ -1,6 +1,11 @@
 {
     "project_name": "project_name",
-    "repo_name": "{{ cookiecutter.project_name.lower().replace(' ', '_') }}",
+    "python_package":               "{{ cookiecutter.project_name.strip().replace(' ', '_').replace('-', '_').lower() }}",
+    "repo_name":                    "{{ cookiecutter.python_package.lower().replace(' ', '_') + '.Algorithms' }}",
+    "ApplicationContext":           "{{ cookiecutter.python_package + 'Context' }}",
+    "ApplicationConfig":            "{{ cookiecutter.python_package + 'Config' }}",
+    "ApplicationController":        "{{ cookiecutter.python_package + 'Controller' }}",
+    "ApplicationHelper":            "{{ cookiecutter.python_package + 'Helper' }}",
     "author_name": "Your name (or your organization/company/team)",
     "description": "A short description of the project.",
     "open_source_license": ["MIT", "BSD-3-Clause", "No license file"],
