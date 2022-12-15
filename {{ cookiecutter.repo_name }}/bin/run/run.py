@@ -4,13 +4,48 @@
 
 # %%
 import datetime as dt
-import numpy as np
 import pandas as pd
-import janitor
-from sklearn.ensemble import RandomForestRegressor
-import plotly.graph_objects as go
-from bin.src.helper import {{ cookiecutter.ApplicationHelper }}
+from typing import Optional, Set, Dict, List
+import os
+import argparse
+import warnings
+warnings.filterwarnings('ignore')
+
+from {{ cookiecutter.python_package }}.helper import {{ cookiecutter.ApplicationHelper }}
+
+
+my_parser = argparse.ArgumentParser()
+my_parser.add_argument('--create-update-data', 	action='store', type=str, default="n")	# build-ts
+my_parser.add_argument('--register-sources', 	action='store', type=str, default="n")	# 
+my_parser.add_argument('--build-models', 		action='store', type=str, default="n")	# 
+my_parser.add_argument('--update-models', 		action='store', type=str, default="n")	# 
+my_parser.add_argument('--launch-forecast', 	action='store', type=str, default="y")	# 
+my_parser.add_argument('--save-forecast', 	 	action='store', type=str, default="n")	# 
+args = my_parser.parse_args()
 
 hlp = {{ cookiecutter.ApplicationHelper }}()
-hlp.cmd_create_update_data(prj_name="", keys=["orders"])
 
+if args.build_ts == "y":
+    # e.g.
+    # hlp.cmd_create_update_data(prj_name="", keys=["orders"])
+    pass
+elif args.register_sources == "y":
+    # e.g.
+    # hlp.
+    pass
+elif args.build_models == "y":
+    # e.g.
+    # hlp.
+    pass
+elif args.update_models == "y":
+    # e.g.
+    # hlp.
+    pass
+elif args.refit_models == "y":
+    # e.g.
+    # hlp.
+    pass
+elif args.launch_forecast == "y":
+    # e.g.
+    # hlp.
+    pass

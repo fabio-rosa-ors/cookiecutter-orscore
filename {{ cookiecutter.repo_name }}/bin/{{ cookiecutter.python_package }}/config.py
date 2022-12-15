@@ -9,12 +9,8 @@ from os import environ
 from dotenv import load_dotenv
 from PreliminaryAnalysis.context import ApplicationConfig, ApplicationContext, StrategyItem, BOEntity
 
-# from src.entity.contact import Contact
-
 from kedro.config import ConfigLoader
 from kedro.io import DataCatalog
-
-# from src.entity.ensemble import produce_contact_list, read_contact_list_from_file
 
 
 load_dotenv()
@@ -115,7 +111,7 @@ class {{ cookiecutter.ApplicationContext }}(ApplicationContext):
 		
 
 		# Initialise a ConfigLoader
-		conf_loader = ConfigLoader(conf_source=BASE_FOLDER+"/conf")
+		conf_loader = ConfigLoader(conf_source=CONFIG_SOURCE)  #CATALOG_PATH)
 		# Load the data catalog configuration from catalog.yml
 		conf_catalog = conf_loader.get("catalog.yml")
 		# Create the DataCatalog instance from the configuration

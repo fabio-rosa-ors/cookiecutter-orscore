@@ -13,7 +13,7 @@ from flask import Flask, request
 from flask_cors import CORS
 from flask_restx import Api, Resource, fields
 
-from bin.src.helper import {{ cookiecutter.ApplicationHelper }}
+from {{ cookiecutter.python_package }}.helper import {{ cookiecutter.ApplicationHelper }}
 
 load_dotenv()
 

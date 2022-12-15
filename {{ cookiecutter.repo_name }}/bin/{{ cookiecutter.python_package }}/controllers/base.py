@@ -3,12 +3,10 @@ import pandas as pd
 import datetime as dt
 # dipendenze da orscore: 
 from orscore.data_handler.symbol_handler import SymbolID
-from orscore.types_global import ResolutionEnum, check_end_date
-from orscore.types_global import ResolutionEnum
 # dipendenze da orscore.server:
 from orsserver.ts_helper import TSController
 # dipendenze da progetto "custom":
-from bin.src.config import {{ cookiecutter.ApplicationContext }}
+from {{ cookiecutter.python_package }}.config import {{ cookiecutter.ApplicationContext }}
 
 class {{ cookiecutter.ApplicationController }}(TSController):
     # """Class with common methods"""

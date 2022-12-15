@@ -2,13 +2,13 @@ from dotenv import load_dotenv
 import datetime as dt
 from typing import List
 
-from bin.src.config import {{ cookiecutter.ApplicationContext }}
-from bin.src.controllers.base import {{ cookiecutter.ApplicationController }}
+from {{ cookiecutter.python_package }}.config import {{ cookiecutter.ApplicationContext }}
+from {{ cookiecutter.python_package }}.controllers.base import {{ cookiecutter.ApplicationController }}
+
+from orsserver.helper import BaseHelper
 
 load_dotenv()
 
-# environ["DATE_RANGE_MIN"] = "2022-01-30"
-#
 #
 class {{ cookiecutter.ApplicationHelper }}(BaseHelper):
 	def __init__(self) -> None:
