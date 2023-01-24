@@ -4,7 +4,7 @@ import datetime as dt
 # dipendenze da orscore: 
 from orscore.data_handler.symbol_handler import SymbolID
 # dipendenze da orscore.server:
-from orsserver.ts_helper import TSController
+from orsserver.ts.ts_helper import TSController
 # dipendenze da progetto "custom":
 from {{ cookiecutter.python_package }}.config import {{ cookiecutter.ApplicationContext }}
 
