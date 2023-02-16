@@ -15,7 +15,7 @@ from {{ cookiecutter.python_package }}.helper import {{ cookiecutter.Application
 
 
 my_parser = argparse.ArgumentParser()
-my_parser.add_argument('--create-update-data', 	action='store', type=str, default="n")	# build-ts
+my_parser.add_argument('--prepare-data', 	action='store', type=str, default="n")	# build-ts
 my_parser.add_argument('--register-sources', 	action='store', type=str, default="n")	# 
 my_parser.add_argument('--build-models', 		action='store', type=str, default="n")	# 
 my_parser.add_argument('--update-models', 		action='store', type=str, default="n")	# 
@@ -25,9 +25,9 @@ args = my_parser.parse_args()
 
 hlp = {{ cookiecutter.ApplicationHelper }}()
 
-if args.build_ts == "y":
+if args.prepare_data == "y":
     # e.g.
-    # hlp.cmd_create_update_data(prj_name="", keys=["orders"])
+    # hlp.
     pass
 elif args.register_sources == "y":
     # e.g.
@@ -41,11 +41,11 @@ elif args.update_models == "y":
     # e.g.
     # hlp.
     pass
-elif args.refit_models == "y":
+elif args.launch_forecast == "y":
     # e.g.
     # hlp.
     pass
-elif args.launch_forecast == "y":
+elif args.save_forecast == "y":
     # e.g.
     # hlp.
     pass

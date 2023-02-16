@@ -4,11 +4,13 @@ import datetime as dt
 # dipendenze da orscore: 
 from orscore.data_handler.symbol_handler import SymbolID
 # dipendenze da orscore.server:
-from orsserver.ts.ts_helper import TSController
+# from orsserver.ts.ts_helper import TSController
+from orsserver.helper import BaseController
+
 # dipendenze da progetto "custom":
 from {{ cookiecutter.python_package }}.config import {{ cookiecutter.ApplicationContext }}
 
-class {{ cookiecutter.ApplicationController }}(TSController):
+class {{ cookiecutter.ApplicationController }}(BaseController):
     # """Class with common methods"""
 
     def  __init__(

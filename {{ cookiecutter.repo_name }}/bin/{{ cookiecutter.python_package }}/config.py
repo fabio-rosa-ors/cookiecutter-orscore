@@ -5,9 +5,8 @@ from typing import Optional
 import datetime as dt
 import pandas as pd
 import os
-from os import environ
 from dotenv import load_dotenv
-from PreliminaryAnalysis.context import ApplicationConfig, ApplicationContext, StrategyItem, BOEntity
+from PreliminaryAnalysis.context import ApplicationConfig, ApplicationContext, StrategyItem, BObj
 
 from kedro.config import ConfigLoader
 from kedro.io import DataCatalog
@@ -20,8 +19,9 @@ load_dotenv()
 COMMON_DATA_FOLDER serve a Luca Aimar per il cluster
 """
 
-COMMON_DATA_FOLDER: str = environ["COMMON_DATA_FOLDER"] or ""
-BASE_FOLDER: str = environ["BASE_FOLDER"] or ""
+COMMON_DATA_FOLDER: str = os.getenv("COMMON_DATA_FOLDER")
+BASE_FOLDER: str = os.getenv("BASE_FOLDER")
+CONFIG_SOURCE:str = os.getenv("CONFIG_SOURCE") 
 
 class {{ cookiecutter.ApplicationConfig }}(ApplicationConfig):
 	def __init__(self, content):
@@ -117,9 +117,9 @@ class {{ cookiecutter.ApplicationContext }}(ApplicationContext):
 		# Create the DataCatalog instance from the configuration
 		self.catalog = DataCatalog.from_config(conf_catalog)
 		# 		
-		self.entities["companies"] = BOEntity(id="companies_mapping", items={}, df=None)
-		self.entities["products"]=BOEntity(id="products_local", items={}, df=None)
-		self.entities["orders"]=BOEntity(id="orders", items={}, df=None)
+		self.entities["companies"] = BObj(id="companies_mapping", items={}, df=None)
+		self.entities["products"]=BObj(id="products_local", items={}, df=None)
+		self.entities["orders"]=BObj(id="orders", items={}, df=None)
 		# pre load anagrafiche
 		self.Load(table_id="companies")
 		self.Load(table_id="products")
@@ -141,32 +141,34 @@ class {{ cookiecutter.ApplicationContext }}(ApplicationContext):
 
 	def forecast_output(self) -> str:
 		res = ""
-		dir_env = environ["OUTPUT_DIR"] or ""
+		dir_env = os.getenv("OUTPUT_DIR")
 		if dir_env:
 			dir_path = os.path.realpath(dir_env)
 			res: str = os.path.join(dir_path, "_forecast_results.h5")
 		return res
 
-	def Load(self,
-			table_id="",
-			date_from=None,
-			date_to=None,
-			file_name="",
-			file_key="" )->Optional[pd.DataFrame]:
+	# Implement only for special cases:
+	#
+	# def Load(self,
+	# 		table_id="",
+	# 		date_from=None,
+	# 		date_to=None,
+	# 		file_name="",
+	# 		file_key="" )->Optional[pd.DataFrame]:
 
-		df:Optional[pd.DataFrame]=None
+	# 	df:Optional[pd.DataFrame]=None
 		
-		if (table_id in self.entities):
+	# 	if (table_id in self.entities):
 				
-			if table_id=="orders":
-				pass
-			elif table_id=="companies":
-				pass
-			elif table_id=="products":
-				pass
-			else:
-				df = self.catalog.load(table_id)
+	# 		if table_id=="orders":
+	# 			pass
+	# 		elif table_id=="companies":
+	# 			pass
+	# 		elif table_id=="products":
+	# 			pass
+	# 		else:
+	# 			df = self.catalog.load(table_id)
 
-			self.entities[table_id].df = df
-		return df
+	# 		self.entities[table_id].df = df
+	# 	return df
 

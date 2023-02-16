@@ -8,7 +8,8 @@ from {{ cookiecutter.python_package }}.controllers.base import {{ cookiecutter.A
 from orsserver.helper import BaseHelper
 
 load_dotenv()
-
+# Datapath keys configuration
+req_conf = {}
 #
 class {{ cookiecutter.ApplicationHelper }}(BaseHelper):
 	def __init__(self) -> None:
@@ -18,7 +19,7 @@ class {{ cookiecutter.ApplicationHelper }}(BaseHelper):
 		self._ctx = {{ cookiecutter.ApplicationContext }}.Build()
 
 		# initialize controllers
-		self._ctl["ts"] = {{ cookiecutter.ApplicationController }}(self.Context)
+		self.Ctl_add("c0", {{ cookiecutter.ApplicationController }}(self.Context)
 
 		# resource keys accessibili tramite get_available_resources
 		# ...
@@ -33,13 +34,13 @@ class {{ cookiecutter.ApplicationHelper }}(BaseHelper):
 		prj_name:str = json.get("project") or self._prj_name
 		
 		status: bool = False
-		return self.cmd_create_update_data(prj_name=prj_name, keys=keys)
+	# 	return self.cmd_create_update_data(prj_name=prj_name, keys=keys)
 
-	def cmd_create_update_data(self, prj_name, keys:List[str]) -> bool:
-		prj_name:str = prj_name or self._prj_name
+	# def cmd_create_update_data(self, prj_name, keys:List[str]) -> bool:
+	# 	prj_name:str = prj_name or self._prj_name
 
 		print("Start update...")
 		start_run = dt.datetime.now()
 		self.set_active_project(prj_name=prj_name)
 		
-		self._ctl["ts"].create_update_data(keys)
+		self._ctl["c0"].prepare_data(keys)
