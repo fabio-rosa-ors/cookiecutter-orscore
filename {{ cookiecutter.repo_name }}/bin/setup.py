@@ -17,7 +17,7 @@ with open("requirements.txt", encoding="utf-8") as f:
     #         requires.append(req)
 
 setup(
-    name={{ cookiecutter.python_package }},
+    name='{{ cookiecutter.python_package }}',
     version='0.1.0',
     description='{{ cookiecutter.description }}',
     author='{{ cookiecutter.author_name }}',
