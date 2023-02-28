@@ -2,10 +2,12 @@ from dotenv import load_dotenv
 import datetime as dt
 from typing import List
 
-from {{ cookiecutter.python_package }}.config import {{ cookiecutter.ApplicationContext }}
-from {{ cookiecutter.python_package }}.controllers.base import {{ cookiecutter.ApplicationController }}
+from algolite.project import PrjParams, DSProject, Strategy
+from algolite.helper import BaseHelper
 
-from orsserver.helper import BaseHelper
+from {{ cookiecutter.python_package }}.config import {{ cookiecutter.ApplicationContext }}
+from {{ cookiecutter.python_package }}.strategies.default import base_strategy
+from {{ cookiecutter.python_package }}.pipelines.base import BasePipeline
 
 load_dotenv()
 # Datapath keys configuration
@@ -13,34 +15,24 @@ req_conf = {}
 #
 class {{ cookiecutter.ApplicationHelper }}(BaseHelper):
 	def __init__(self) -> None:
-		super().__init__(prj_conf={}, req_conf=req_conf)
 
-		# initialize application context and project
-		self._ctx = {{ cookiecutter.ApplicationContext }}.Build()
+		# initialize and register available projects
+		poc = {{ cookiecutter.ApplicationContext }}(prj_config=PrjParams(
+			name="POC", 
+			candidate_strategies={"base_strategy": base_strategy}))
+		
+		# register project
+		self.add_project(poc)
 
-		# initialize controllers
-		self.Ctl_add("c0", {{ cookiecutter.ApplicationController }}(self.Context)
+		# register pipelines (default: add the pipeline to all available projects)
+		self.add_pipeline(name="poc_pipeline", obj=BasePipeline)
 
-		# resource keys accessibili tramite get_available_resources
-		# ...
-
-		# initialize active project
 		self.set_active_project("POC")
 
-	def create_update_data(self, json) -> bool:
-		"""Create/Update the data of a list of resource keys"""
-		keys: List[str] = json.get("resource_keys")
-
-		prj_name:str = json.get("project") or self._prj_name
-		
-		status: bool = False
-	# 	return self.cmd_create_update_data(prj_name=prj_name, keys=keys)
-
-	# def cmd_create_update_data(self, prj_name, keys:List[str]) -> bool:
-	# 	prj_name:str = prj_name or self._prj_name
-
-		print("Start update...")
-		start_run = dt.datetime.now()
-		self.set_active_project(prj_name=prj_name)
-		
-		self._ctl["c0"].prepare_data(keys)
+	def prepare_data(self):
+		# e.g.
+		# poc: DSProject = self.get_active_project()
+		# poc_strategy: Strategy = poc.SelectedStrategies[0] # base_strategy
+		# ppl: BasePipeline = poc._ppl['poc_pipeline']()     # pipeline instance
+		# ppl.AdjustData(strategy=poc_strategy)
+		pass

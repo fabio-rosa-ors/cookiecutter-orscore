@@ -27,7 +27,7 @@ hlp = {{ cookiecutter.ApplicationHelper }}()
 
 if args.prepare_data == "y":
     # e.g.
-    # hlp.
+    # hlp.prepare_data()
     pass
 elif args.register_sources == "y":
     # e.g.

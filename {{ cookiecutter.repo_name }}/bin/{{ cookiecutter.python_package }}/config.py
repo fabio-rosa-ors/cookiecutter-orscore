@@ -1,16 +1,13 @@
 
 from typing import Optional
 
-# import orscore.data_processor as odp
-import datetime as dt
-import pandas as pd
 import os
 from dotenv import load_dotenv
-from PreliminaryAnalysis.context import ApplicationConfig, ApplicationContext, StrategyItem, BObj
 
 from kedro.config import ConfigLoader
 from kedro.io import DataCatalog
 
+from algolite import DSProject, PrjParams
 
 load_dotenv()
 # lettura da env:
@@ -23,106 +20,93 @@ COMMON_DATA_FOLDER: str = os.getenv("COMMON_DATA_FOLDER")
 BASE_FOLDER: str = os.getenv("BASE_FOLDER")
 CONFIG_SOURCE:str = os.getenv("CONFIG_SOURCE") 
 
-class {{ cookiecutter.ApplicationConfig }}(ApplicationConfig):
-	def __init__(self, content):
-		super().__init__(content)
+# class Config():
+# 	def __init__(self):
 	
-		#
-		# configurazione per preparare le TS delle "sku" importate da self._conf["sale"]
-		# ../tarnsactions/sale_txn.h5" --> DATA_DIR/
-		#
-		self._conf["orders"] = {
-			"data_path": BASE_FOLDER + "",
-			"db": "",
-			"db_table": "",
-			"hierarchy_map": {},
-			"resolution": "Undef",
-			"ors_index": ["Date"],
-			"dtypes_mapping": {
-				"Date": "datetime",
-				'CompanyCode': "string",
-				'ArticleCode': "string",
-				'Quantity': "float32",
-				'TotalValue': "float32",
-			},
-			"names_mapping": {
-				'Date': "DeliveryDate",
-				'CompanyCode':'CompanyCode',
-				'ArticleCode': "ArticleCode",
-				'Quantity':'Quantity',
-				'TotalValue':'TotalValue',
-			},
-			"indicators": {},
-			"aggregation": {},
-			"aggregation_dtypes": {},
-			"file_prefix": "",
-		}
+# 		#
+# 		# configurazione per preparare le TS delle "sku" importate da self._conf["sale"]
+# 		# ../tarnsactions/sale_txn.h5" --> DATA_DIR/
+# 		#
+# 		self._conf["orders"] = {
+# 			"data_path": BASE_FOLDER + "",
+# 			"db": "",
+# 			"db_table": "",
+# 			"hierarchy_map": {},
+# 			"resolution": "Undef",
+# 			"ors_index": ["Date"],
+# 			"dtypes_mapping": {
+# 				"Date": "datetime",
+# 				'CompanyCode': "string",
+# 				'ArticleCode': "string",
+# 				'Quantity': "float32",
+# 				'TotalValue': "float32",
+# 			},
+# 			"names_mapping": {
+# 				'Date': "DeliveryDate",
+# 				'CompanyCode':'CompanyCode',
+# 				'ArticleCode': "ArticleCode",
+# 				'Quantity':'Quantity',
+# 				'TotalValue':'TotalValue',
+# 			},
+# 			"indicators": {},
+# 			"aggregation": {},
+# 			"aggregation_dtypes": {},
+# 			"file_prefix": "",
+# 		}
 
-		self._conf["orders_ts"] = {
-			"data_path": "",
-			"db": "",
-			"db_table": "",
-			"hierarchy_map": {"CompanyCode":"company", "ArticleCode":"sku"},
-			"resolution": "W-SUN",
-			"ors_index": ["ors_index"],
-			"dtypes_mapping": {},
-			"names_mapping": {
-				'DeliveryDate': "DeliveryDate",
-				'ArticleCode': "ArticleCode",
-				'Quantity':'Quantity',
-				'TotalValue':'TotalValue',
-			},
-			"indicators": {},
-			"aggregation": {
-				'Quantity':['sum'],
-				'TotalValue':['sum'],
-			},
-			"aggregation_dtypes": {
-				'Quantity': ["<f4"],
-				'TotalValue': ["<f4"],
-			},
-			"file_prefix": "",
-		}
+# 		self._conf["orders_ts"] = {
+# 			"data_path": "",
+# 			"db": "",
+# 			"db_table": "",
+# 			"hierarchy_map": {"CompanyCode":"company", "ArticleCode":"sku"},
+# 			"resolution": "W-SUN",
+# 			"ors_index": ["ors_index"],
+# 			"dtypes_mapping": {},
+# 			"names_mapping": {
+# 				'DeliveryDate': "DeliveryDate",
+# 				'ArticleCode': "ArticleCode",
+# 				'Quantity':'Quantity',
+# 				'TotalValue':'TotalValue',
+# 			},
+# 			"indicators": {},
+# 			"aggregation": {
+# 				'Quantity':['sum'],
+# 				'TotalValue':['sum'],
+# 			},
+# 			"aggregation_dtypes": {
+# 				'Quantity': ["<f4"],
+# 				'TotalValue': ["<f4"],
+# 			},
+# 			"file_prefix": "",
+# 		}
   
 
 
-class {{ cookiecutter.ApplicationContext }}(ApplicationContext):
-	@staticmethod
-	def Build() -> Optional["{{ cookiecutter.ApplicationContext }}"]:
-		if ApplicationContext._reference is None:
-			# create empty config obj
-			dm_conf = {{ cookiecutter.ApplicationConfig }}({})
-			# start from dmconfig and fill with ENV
-			dm_conf = ApplicationContext._build_from_env(conf=dm_conf)
-			# setup in appcontext
-			ApplicationContext._reference = {{ cookiecutter.ApplicationContext }}(config_obj=dm_conf)
-		return ApplicationContext.Ref()
-
+class {{ cookiecutter.ApplicationContext }}(DSProject):
 	def __init__(
-		self, config_file_name: str = "", config_obj: Optional[ApplicationConfig] = None
+		self,
+		prj_conf: PrjParams 
 	) -> None:
+		
+		super().__init__(prj_conf)
+		# super().__init__(config_file_name, config_obj)
 
-		super().__init__(config_file_name, config_obj)
-
-		# todo: available strategies: caricare da forecast project !!!
-		if not hasattr(self, "_strategy_map"):
-			self._strategy_map = {}
-		self._strategy_map["orders"] = StrategyItem(name="orders", frequency="W-SUN")
+		# # todo: available strategies: caricare da forecast project !!!
 		
 
-		# Initialise a ConfigLoader
-		conf_loader = ConfigLoader(conf_source=CONFIG_SOURCE)  #CATALOG_PATH)
-		# Load the data catalog configuration from catalog.yml
-		conf_catalog = conf_loader.get("catalog.yml")
-		# Create the DataCatalog instance from the configuration
-		self.catalog = DataCatalog.from_config(conf_catalog)
-		# 		
-		self.entities["companies"] = BObj(id="companies_mapping", items={}, df=None)
-		self.entities["products"]=BObj(id="products_local", items={}, df=None)
-		self.entities["orders"]=BObj(id="orders", items={}, df=None)
-		# pre load anagrafiche
-		self.Load(table_id="companies")
-		self.Load(table_id="products")
+		# # Initialise a ConfigLoader
+		# conf_loader = ConfigLoader(conf_source=CONFIG_SOURCE)  #CATALOG_PATH)
+		# # Load the data catalog configuration from catalog.yml
+		# conf_catalog = conf_loader.get("catalog.yml")
+		# # Create the DataCatalog instance from the configuration
+		# self.catalog = DataCatalog.from_config(conf_catalog)
+		# # 		
+		# self.entities["companies"] = BObj(id="companies_mapping", items={}, df=None)
+		# self.entities["products"]=BObj(id="products_local", items={}, df=None)
+		# self.entities["orders"]=BObj(id="orders", items={}, df=None)
+		# # pre load anagrafiche
+		# self.Load(table_id="companies")
+		# self.Load(table_id="products")
 
 
 	def filename(self, key: str = "", sto="", dep="") -> str:

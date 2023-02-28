@@ -3,8 +3,6 @@
     "python_package":               "{{ cookiecutter.project_name.strip().replace(' ', '_').replace('-', '_').lower() }}",
     "repo_name":                    "{{ cookiecutter.project_name.replace(' ', '_') + '.Algorithms' }}",
     "ApplicationContext":           "{{ cookiecutter.project_name.replace(' ', '_') + 'Context' }}",
-    "ApplicationConfig":            "{{ cookiecutter.project_name.replace(' ', '_') + 'Config' }}",
-    "ApplicationController":        "{{ cookiecutter.project_name.replace(' ', '_') + 'Controller' }}",
     "ApplicationHelper":            "{{ cookiecutter.project_name.replace(' ', '_') + 'Helper' }}",
     "author_name": "Your name (or your organization/company/team)",
     "description": "A short description of the project.",
