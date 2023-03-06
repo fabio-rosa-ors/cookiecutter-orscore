@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Any
 from dataclasses import dataclass
 from algolite import ModelInterface, Strategy, DataFilter, ModelParams
 

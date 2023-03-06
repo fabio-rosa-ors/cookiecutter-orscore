@@ -1,10 +1,9 @@
 from dotenv import load_dotenv
 import os
 
-from algolite.project import PrjParams, DSProject, Strategy, FSPath
-from algolite.helper import BaseHelper
+from algolite import PrjParams, DSProject, Strategy, FSPath, BaseHelper
 
-from {{ cookiecutter.python_package }}.config import {{ cookiecutter.ApplicationContext }}
+from {{ cookiecutter.python_package }}.config import {{ cookiecutter.ApplicationContext }}, {{ cookiecutter.ApplicationFSPath }}
 from {{ cookiecutter.python_package }}.strategies.default import base_strategy
 from {{ cookiecutter.python_package }}.pipelines.base import BasePipeline
 from {{ cookiecutter.python_package }}.models.model_factory import {{ cookiecutter.ApplicationModelFactory }}
@@ -14,6 +13,8 @@ load_dotenv()
 class {{ cookiecutter.ApplicationHelper }}(BaseHelper):
 	def __init__(self) -> None:
 
+		super().__init__()
+		
 		# create instance of FSPath with .env DATA_FOLDER
 		# this is used by the pipelines to get the right data paths
 		fs_path: FSPath = {{cookiecutter.ApplicationFSPath}}(os.getenv("DATA_FOLDER") or "")
@@ -30,7 +31,7 @@ class {{ cookiecutter.ApplicationHelper }}(BaseHelper):
 			strategies={"base": base_stg}
 		)
 
-		poc = {{ cookiecutter.ApplicationContext }}(prj_config=poc_prj_config)
+		poc = {{ cookiecutter.ApplicationContext }}(prj_conf=poc_prj_config)
 		
 		# register project in the helper
 		self.add_project(poc)
