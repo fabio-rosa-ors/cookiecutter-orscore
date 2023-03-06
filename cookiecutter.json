@@ -5,6 +5,7 @@
     "ApplicationContext":           "{{ cookiecutter.project_name.replace(' ', '_') + 'Project' }}",
     "ApplicationHelper":            "{{ cookiecutter.project_name.replace(' ', '_') + 'Helper' }}",
     "ApplicationFSPath":            "{{ cookiecutter.project_name.replace(' ', '_') + 'FSPath' }}",
+    "ApplicationModelFactory":      "{{ cookiecutter.project_name.replace(' ', '_') + 'ModelFactory'}}",
     "author_name": "Your name (or your organization/company/team)",
     "description": "A short description of the project.",
     "open_source_license": ["MIT", "BSD-3-Clause", "No license file"],
