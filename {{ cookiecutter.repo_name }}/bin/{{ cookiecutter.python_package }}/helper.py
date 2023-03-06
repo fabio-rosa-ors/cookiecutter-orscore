@@ -1,32 +1,45 @@
 from dotenv import load_dotenv
 import os
 
-from algolite.project import PrjParams, DSProject, Strategy
+from algolite.project import PrjParams, DSProject, Strategy, FSPath
 from algolite.helper import BaseHelper
 
 from {{ cookiecutter.python_package }}.config import {{ cookiecutter.ApplicationContext }}
 from {{ cookiecutter.python_package }}.strategies.default import base_strategy
 from {{ cookiecutter.python_package }}.pipelines.base import BasePipeline
+from {{ cookiecutter.python_package }}.models.model_factory import {{ cookiecutter.ApplicationModelFactory }}
 
 load_dotenv()
 
 class {{ cookiecutter.ApplicationHelper }}(BaseHelper):
 	def __init__(self) -> None:
 
-		# initialize and register available projects
-		poc = {{ cookiecutter.ApplicationContext }}(prj_config=PrjParams(
-			name="POC", 
-			candidate_strategies={"base_strategy": base_strategy}))
+		# create instance of FSPath with .env DATA_FOLDER
+		# this is used by the pipelines to get the right data paths
+		fs_path: FSPath = {{cookiecutter.ApplicationFSPath}}(os.getenv("DATA_FOLDER") or "")
+
+		# init strategies
+		base_stg: Strategy = base_strategy 
+
+		# assign fs_path to strategies (to get the right data paths when are used)
+		base_stg.Paths = fs_path
+
+		# define project parameters (e.g., name and strategies)
+		poc_prj_config: PrjParams = PrjParams(
+			name="POC",
+			strategies={"base": base_stg}
+		)
+
+		poc = {{ cookiecutter.ApplicationContext }}(prj_config=poc_prj_config)
 		
-		# register project
+		# register project in the helper
 		self.add_project(poc)
 
-		# create instance of FSPath with the .env DATA_FOLDER
-		# this is used by the pipeline to get the right data paths
-		fs_path = {{cookiecutter.ApplicationFSPath}}(os.getenv("DATA_FOLDER") or "")
+		# init pipelines
+		poc_pipeline = BasePipeline(fs_path=fs_path, 
+									model_factory={{cookiecutter.ApplicationModelFactory}}())
 
-		# register pipelines (default: add the pipeline to all available projects)
-		self.add_pipeline(name="poc_pipeline", obj=BasePipeline())
+		self.add_pipeline(name="poc_pipeline", obj=poc_pipeline)
 
 		self.set_active_project("POC")
 
