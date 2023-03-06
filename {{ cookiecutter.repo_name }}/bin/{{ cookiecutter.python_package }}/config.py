@@ -1,7 +1,7 @@
 
 import os
 from dotenv import load_dotenv
-
+from typing import Optional
 from algolite import DSProject, PrjParams, FSPath, Command
 
 load_dotenv()
@@ -17,7 +17,7 @@ class {{ cookiecutter.ApplicationFSPath}}(FSPath):
 		# override original FSPaths data prefixes
 		return super().get_prefix_path(target, session)
 		
-	def file_name(self, tag: str, target: FSPath.FS, session: Command = None) -> str:
+	def file_name(self, tag: str, target: FSPath.FS, session: Optional[Command] = None) -> str:
 		# override original FSPaths file_name behaviour
 		return super().file_name(tag, target, session)
 
