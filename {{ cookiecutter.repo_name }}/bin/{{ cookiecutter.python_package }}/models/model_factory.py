@@ -1,5 +1,5 @@
-from algolite import ModelFactory, Strategy, DataFilter
+from algolite import ModelFactory, Algo, DataFilter
 
 class {{ cookiecutter.ApplicationModelFactory }}(ModelFactory):
-    def create_object(strategy:Strategy=None, datasplit:DataFilter=None):
+    def create_object(strategy:Algo=None, datasplit:DataFilter=None):
         pass

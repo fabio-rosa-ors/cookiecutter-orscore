@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 import os
 
-from algolite import PrjParams, DSProject, Strategy, FSPath, BaseHelper
+from algolite import PrjParams, DSProject, Algo, FSPath, BaseHelper
 
 from {{ cookiecutter.python_package }}.config import {{ cookiecutter.ApplicationContext }}, {{ cookiecutter.ApplicationFSPath }}
 from {{ cookiecutter.python_package }}.strategies.default import base_strategy
@@ -20,7 +20,7 @@ class {{ cookiecutter.ApplicationHelper }}(BaseHelper):
 		fs_path: FSPath = {{cookiecutter.ApplicationFSPath}}(os.getenv("DATA_FOLDER") or "")
 
 		# init strategies
-		base_stg: Strategy = base_strategy 
+		base_stg: Algo = base_strategy 
 
 		# assign fs_path to strategies (to get the right data paths when are used)
 		base_stg.Paths = fs_path
@@ -47,7 +47,7 @@ class {{ cookiecutter.ApplicationHelper }}(BaseHelper):
 	def prepare_data(self):
 		# e.g.
 		# poc: DSProject = self.get_active_project()
-		# poc_strategy: Strategy = poc.SelectedStrategies[0]    # base_strategy
+		# poc_strategy: Algo = poc.SelectedStrategies[0]    # base_strategy
 		# ppl: BasePipeline = poc.Pipelines['poc_pipeline']     # pipeline instance
 		# ppl.AdjustData(strategy=poc_strategy)
 		pass
