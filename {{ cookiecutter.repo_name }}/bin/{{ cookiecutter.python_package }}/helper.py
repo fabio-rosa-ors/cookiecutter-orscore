@@ -19,30 +19,21 @@ class {{ cookiecutter.ApplicationHelper }}(BaseHelper):
 		# this is used by the pipelines to get the right data paths
 		fs_path: FSPath = {{cookiecutter.ApplicationFSPath}}(os.getenv("DATA_FOLDER") or "")
 
-		# init strategies
-		base_stg: Algo = base_strategy 
-
-		# assign fs_path to strategies (to get the right data paths when are used)
-		base_stg.Paths = fs_path
+		# init pipelines
+		self.add_pipeline(name="base_pipeline", obj=BasePipeline(fs_path=fs_path, 
+									model_factory={{cookiecutter.ApplicationModelFactory}}()))
 
 		# define project parameters (e.g., name and strategies)
-		poc_prj_config: PrjParams = PrjParams(
-			name="POC",
-			strategies={"base": base_stg}
+		prj_config: PrjParams = PrjParams(
+			name={{cookiecutter.python_package}},
+			strategies={"base": base_strategy}
 		)
-
-		poc = {{ cookiecutter.ApplicationContext }}(prj_conf=poc_prj_config)
+		prj = {{ cookiecutter.ApplicationContext }}(prj_conf=prj_config)
 		
 		# register project in the helper
-		self.add_project(poc)
+		self.add_project(prj)
 
-		# init pipelines
-		poc_pipeline = BasePipeline(fs_path=fs_path, 
-									model_factory={{cookiecutter.ApplicationModelFactory}}())
-
-		self.add_pipeline(name="poc_pipeline", obj=poc_pipeline)
-
-		self.set_active_project("POC")
+		self.set_active_project({{cookiecutter.python_package}})
 
 	def prepare_data(self):
 		# e.g.
